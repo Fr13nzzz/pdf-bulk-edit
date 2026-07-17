@@ -9,11 +9,11 @@ export async function applySettingsToPdf(file, settings) {
   const bytes = await file.arrayBuffer()
   const pdfDoc = await PDFDocument.load(bytes, { updateMetadata: false })
 
-  if (settings.title.apply) {
-    pdfDoc.setTitle(settings.title.value)
+  if (settings.title.value.trim()) {
+    pdfDoc.setTitle(settings.title.value.trim())
   }
-  if (settings.author.apply) {
-    pdfDoc.setAuthor(settings.author.value)
+  if (settings.author.value.trim()) {
+    pdfDoc.setAuthor(settings.author.value.trim())
   }
 
   const catalog = pdfDoc.catalog

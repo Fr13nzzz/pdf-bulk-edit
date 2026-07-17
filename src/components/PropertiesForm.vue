@@ -15,27 +15,15 @@ const pageModeDisabled = computed(
 
     <h3>Beschreibung</h3>
     <div class="field-group">
-      <input v-model="settings.title.apply" type="checkbox" class="apply-toggle" title="Übernehmen" />
       <div class="field-body">
         <label class="field-label">Titel</label>
-        <input
-          v-model="settings.title.value"
-          type="text"
-          :disabled="!settings.title.apply"
-          placeholder="z. B. Jahresbericht 2026"
-        />
+        <input v-model="settings.title.value" type="text" placeholder="z. B. Jahresbericht 2026" />
       </div>
     </div>
     <div class="field-group">
-      <input v-model="settings.author.apply" type="checkbox" class="apply-toggle" title="Übernehmen" />
       <div class="field-body">
         <label class="field-label">Verfasser</label>
-        <input
-          v-model="settings.author.value"
-          type="text"
-          :disabled="!settings.author.apply"
-          placeholder="z. B. Max Mustermann"
-        />
+        <input v-model="settings.author.value" type="text" placeholder="z. B. Max Mustermann" />
       </div>
     </div>
 

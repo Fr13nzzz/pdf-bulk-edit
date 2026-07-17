@@ -15,8 +15,8 @@ export const PAGE_LAYOUT_OPTIONS = [
 
 export function createDefaultSettings() {
   return {
-    title: { apply: false, value: '' },
-    author: { apply: false, value: '' },
+    title: { value: '' },
+    author: { value: '' },
     pageMode: { apply: false, value: 'UseNone' },
     pageLayout: { apply: false, value: '' },
     viewerPrefs: {

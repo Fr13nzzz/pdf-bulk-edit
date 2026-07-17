@@ -4,8 +4,8 @@ import { readFileSync } from 'fs'
 async function applySettingsToPdf(bytes, settings) {
   const pdfDoc = await PDFDocument.load(bytes, { updateMetadata: false })
 
-  if (settings.title.apply) pdfDoc.setTitle(settings.title.value)
-  if (settings.author.apply) pdfDoc.setAuthor(settings.author.value)
+  if (settings.title.value.trim()) pdfDoc.setTitle(settings.title.value.trim())
+  if (settings.author.value.trim()) pdfDoc.setAuthor(settings.author.value.trim())
 
   const catalog = pdfDoc.catalog
   const context = pdfDoc.context
@@ -41,8 +41,8 @@ const input = readFileSync('/tmp/claude-1000/-var-www-html-projects-docx-bulk-ed
 
 // Test 1: normal case, no fullscreen conflict
 const settings1 = {
-  title: { apply: true, value: 'Testtitel' },
-  author: { apply: true, value: 'Test Autor' },
+  title: { value: 'Testtitel' },
+  author: { value: 'Test Autor' },
   pageMode: { apply: true, value: 'UseOutlines' },
   pageLayout: { apply: true, value: 'TwoColumnLeft' },
   viewerPrefs: { apply: true, fitWindow: true, centerWindow: false, displayDocTitle: true, fullScreen: false },
@@ -59,8 +59,8 @@ console.log('ViewerPreferences:', vp1?.toString())
 
 // Test 2: fullscreen checkbox wins over pageMode dropdown
 const settings2 = {
-  title: { apply: false, value: '' },
-  author: { apply: false, value: '' },
+  title: { value: '' },
+  author: { value: '' },
   pageMode: { apply: true, value: 'UseThumbs' },
   pageLayout: { apply: true, value: '' }, // Standard -> omit key
   viewerPrefs: { apply: true, fitWindow: false, centerWindow: true, displayDocTitle: false, fullScreen: true },
@@ -75,8 +75,8 @@ console.log('ViewerPreferences:', vp2?.toString())
 
 // Test 3: nothing applied -> original PDF fields untouched
 const settings3 = {
-  title: { apply: false, value: 'ignored' },
-  author: { apply: false, value: 'ignored' },
+  title: { value: '' },
+  author: { value: '' },
   pageMode: { apply: false, value: 'UseNone' },
   pageLayout: { apply: false, value: 'SinglePage' },
   viewerPrefs: { apply: false, fitWindow: true, centerWindow: true, displayDocTitle: true, fullScreen: true },
