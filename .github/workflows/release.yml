@@ -36,3 +36,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: pdf-bulk-edit-${{ github.ref_name }}.zip
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PDF_BULK_EDIT }}"
+          channelId: live
+          projectId: pdf-bulk-edit
