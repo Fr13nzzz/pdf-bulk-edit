@@ -23,7 +23,7 @@ const pageModeDisabled = computed(
     <div class="field-group">
       <div class="field-body">
         <label class="field-label">Verfasser</label>
-        <input v-model="settings.author.value" type="text" placeholder="z. B. Max Mustermann" />
+        <input v-model="settings.creator.value" type="text" placeholder="z. B. Max Mustermann" />
       </div>
     </div>
 

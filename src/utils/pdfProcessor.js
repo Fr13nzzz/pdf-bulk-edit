@@ -12,8 +12,8 @@ export async function applySettingsToPdf(file, settings) {
   if (settings.title.value.trim()) {
     pdfDoc.setTitle(settings.title.value.trim())
   }
-  if (settings.author.value.trim()) {
-    pdfDoc.setAuthor(settings.author.value.trim())
+  if (settings.creator.value.trim()) {
+    pdfDoc.setCreator(settings.creator.value.trim())
   }
 
   const catalog = pdfDoc.catalog
