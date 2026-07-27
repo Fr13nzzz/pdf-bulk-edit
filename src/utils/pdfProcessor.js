@@ -1,4 +1,5 @@
 import { PDFDocument, PDFName } from 'pdf-lib'
+import { updateXmpDublinCoreFields } from './xmpMetadata.js'
 
 /**
  * Applies the given settings to a single PDF file and returns the
@@ -9,11 +10,20 @@ export async function applySettingsToPdf(file, settings) {
   const bytes = await file.arrayBuffer()
   const pdfDoc = await PDFDocument.load(bytes, { updateMetadata: false })
 
-  if (settings.title.value.trim()) {
-    pdfDoc.setTitle(settings.title.value.trim())
+  const titleValue = settings.title.value.trim()
+  if (titleValue) {
+    pdfDoc.setTitle(titleValue)
   }
-  if (settings.author.value.trim()) {
-    pdfDoc.setAuthor(settings.author.value.trim())
+  const authorValue = settings.author.value.trim()
+  if (authorValue) {
+    pdfDoc.setAuthor(authorValue)
+  }
+
+  if (titleValue || authorValue) {
+    syncXmpMetadata(pdfDoc, {
+      title: titleValue || undefined,
+      author: authorValue || undefined,
+    })
   }
 
   const catalog = pdfDoc.catalog
@@ -48,4 +58,30 @@ export async function applySettingsToPdf(file, settings) {
   }
 
   return pdfDoc.save()
+}
+
+/**
+ * pdf-lib's setTitle()/setAuthor() only update the /Info dictionary, never the
+ * XMP metadata stream, and Acrobat Pro prefers XMP over /Info when both are
+ * present. Patch just the changed dc:title/dc:creator fields so the rest of
+ * the XMP metadata (PDF/A tags, custom properties, ...) survives. Only when
+ * the existing stream can't be parsed do we fall back to removing it
+ * entirely, so Acrobat at least falls back to the updated /Info dictionary.
+ */
+function syncXmpMetadata(pdfDoc, fields) {
+  const catalog = pdfDoc.catalog
+  const metadataRef = catalog.get(PDFName.of('Metadata'))
+  if (!metadataRef) {
+    return
+  }
+
+  const metadataStream = pdfDoc.context.lookup(metadataRef)
+  const updatedContents = updateXmpDublinCoreFields(metadataStream.getContents(), fields)
+
+  if (updatedContents) {
+    const newStream = pdfDoc.context.stream(updatedContents, { Type: 'Metadata', Subtype: 'XML' })
+    catalog.set(PDFName.of('Metadata'), pdfDoc.context.register(newStream))
+  } else {
+    catalog.delete(PDFName.of('Metadata'))
+  }
 }
