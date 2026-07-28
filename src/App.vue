@@ -5,6 +5,8 @@ import PropertiesForm from './components/PropertiesForm.vue'
 import ApplyStep from './components/ApplyStep.vue'
 import { createDefaultSettings } from './utils/settings'
 
+const version = __APP_VERSION__
+
 let nextId = 1
 const files = reactive([])
 const settings = ref(createDefaultSettings())
@@ -36,4 +38,8 @@ function removeFile(id) {
   <UploadStep :files="files" @add-files="addFiles" @remove-file="removeFile" />
   <PropertiesForm v-model="settings" />
   <ApplyStep :files="files" :settings="settings" />
+
+  <footer>
+    <p>Version: {{ version }}</p>
+  </footer>
 </template>

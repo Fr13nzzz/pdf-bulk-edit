@@ -316,3 +316,19 @@ button.primary:hover:not(:disabled) {
     color: #999;
   }
 }
+
+footer {
+  margin-top: 2rem;
+  border-top: 1px solid #e0e2e7;
+  padding-top: 1rem;
+  text-align: center;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  footer {
+    border-top-color: #2c303a;
+    color: #999;
+  }
+}
